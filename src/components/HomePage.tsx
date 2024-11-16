@@ -167,7 +167,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col items-center min-h-screen bg-white pb-28 pt-8">
+        <div className="flex flex-col items-center min-h-screen bg-[#FBF7EF] pb-28 pt-8">
             <div className="w-full max-w-[368px] px-4 space-y-4">
                 {/* Header Section */}
                 <div className="relative space-y-2 text-center pb-2">
@@ -236,7 +236,7 @@ const HomePage: React.FC = () => {
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                                     <span className="text-sm font-medium text-white">
-                                                        {formatTimeRemaining(markets[currentIndex].end_time)}
+                                                        Ends in {formatTimeRemaining(markets[currentIndex].end_time)}
                                                     </span>
                                                 </div>
                                             </div>
@@ -315,12 +315,12 @@ const HomePage: React.FC = () => {
                                                         max="100"
                                                         value={points}
                                                         onChange={(e) => setPoints(Number(e.target.value))}
-                                                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer 
+                                                        className="w-full h-2 bg-gray-400 rounded-lg appearance-none cursor-pointer 
                                                             [&::-webkit-slider-thumb]:appearance-none
                                                             [&::-webkit-slider-thumb]:w-8
                                                             [&::-webkit-slider-thumb]:h-8
                                                             [&::-webkit-slider-thumb]:rounded-full
-                                                            [&::-webkit-slider-thumb]:bg-purple-500
+                                                            [&::-webkit-slider-thumb]:bg-gray-800
                                                             [&::-webkit-slider-thumb]:cursor-pointer
                                                             [&::-webkit-slider-thumb]:shadow-lg
                                                             [&::-webkit-slider-thumb]:border-2

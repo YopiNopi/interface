@@ -3,9 +3,9 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, Heart, Trophy, Gift, Users } from 'lucide-react'
+import { UserCircle2, Heart, Trophy, Gift, Users } from 'lucide-react'
 
-type Page = 'game' | 'ranking' | 'instructions' | 'quests' | 'referrals'
+type Page = 'profile' | 'ranking' | 'game' | 'quests' | 'referrals'
 
 const getIcon = (page: Page, isActive: boolean) => {
   const iconProps = {
@@ -14,7 +14,7 @@ const getIcon = (page: Page, isActive: boolean) => {
   }
 
   switch (page) {
-    case 'instructions': return <BookOpen {...iconProps} />
+    case 'profile': return <UserCircle2 {...iconProps} />
     case 'referrals': return <Users {...iconProps} />
     case 'game': return <Heart {...iconProps} />
     case 'ranking': return <Trophy {...iconProps} />
@@ -24,7 +24,7 @@ const getIcon = (page: Page, isActive: boolean) => {
 
 const getGradient = (page: Page) => {
   switch (page) {
-    case 'instructions': return 'from-blue-500 to-indigo-500'
+    case 'profile': return 'from-violet-500 to-indigo-500'
     case 'referrals': return 'from-purple-500 to-pink-500'
     case 'game': return 'from-emerald-500 to-teal-500'
     case 'ranking': return 'from-amber-500 to-orange-500'
@@ -37,7 +37,7 @@ export default function NavigationBar() {
   const currentPage: Page = 
     pathname === '/' ? 'game' :
     pathname === '/ranking' ? 'ranking' :
-    pathname === '/instructions' ? 'instructions' :
+    pathname === '/profile' ? 'profile' :
     pathname === '/quests' ? 'quests' :
     pathname === '/referrals' ? 'referrals' :
     'game'
@@ -45,7 +45,7 @@ export default function NavigationBar() {
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex justify-center">
       <div className="flex items-center gap-2 p-2 rounded-2xl bg-gray-900/90 backdrop-blur-lg shadow-lg border border-gray-800">
-        {(['instructions', 'referrals', 'game', 'ranking', 'quests'] as const).map((page) => {
+        {(['profile', 'referrals', 'game', 'ranking', 'quests'] as const).map((page) => {
           const isActive = currentPage === page;
           return (
             <Link 
