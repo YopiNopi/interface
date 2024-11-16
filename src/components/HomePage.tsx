@@ -168,16 +168,16 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center min-h-screen bg-white pb-28 pt-8">
-            <div className="w-full max-w-[368px] px-4 space-y-8">
+            <div className="w-full max-w-[368px] px-4 space-y-4">
                 {/* Header Section */}
-                <div className="relative space-y-3 text-center pb-2">
+                <div className="relative space-y-2 text-center pb-2">
                     <div className="relative transform">
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                            <div className="w-40 h-40 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-full blur-3xl animate-pulse" />
-                            <div className="absolute inset-0 w-32 h-32 bg-gradient-to-l from-fuchsia-500/20 via-violet-500/20 to-indigo-500/20 rounded-full blur-2xl animate-pulse delay-100" />
+                            <div className="w-32 h-32 bg-gradient-to-r from-indigo-500/30 via-purple-500/30 to-pink-500/30 rounded-full blur-3xl animate-pulse" />
+                            <div className="absolute inset-0 w-24 h-24 bg-gradient-to-l from-fuchsia-500/20 via-violet-500/20 to-indigo-500/20 rounded-full blur-2xl animate-pulse delay-100" />
                         </div>
                         
-                        <h1 className="relative text-5xl font-black tracking-tight drop-shadow-sm">
+                        <h1 className="relative text-4xl font-black tracking-tight drop-shadow-sm">
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 animate-gradient-x">
                                 Yopi
                             </span>
@@ -194,7 +194,7 @@ const HomePage: React.FC = () => {
                 </div>
 
                 {/* Market Card */}
-                <div className="relative h-[460px] w-full">
+                <div className="relative h-[420px] w-full">
                     <AnimatePresence initial={false} custom={direction}>
                         <motion.div
                             key={currentIndex}
@@ -210,7 +210,7 @@ const HomePage: React.FC = () => {
                             className="absolute w-full cursor-grab active:cursor-grabbing"
                             whileDrag={{ scale: 1.05 }}
                         >
-                            <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden h-[460px]">
+                            <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden h-[420px]">
                                 {/* Gradient overlay for text readability */}
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
                                 
@@ -243,7 +243,7 @@ const HomePage: React.FC = () => {
                                         </div>
 
                                         <div className="space-y-4">
-                                            <h2 className="text-2xl font-bold text-gray-800">
+                                            <h2 className="text-xl font-bold text-gray-800">
                                                 {markets[currentIndex].question_text}
                                             </h2>
                                             
@@ -357,8 +357,8 @@ const HomePage: React.FC = () => {
                                                 */}
 
                                                 {/* Points Display */}
-                                                <span className="text-sm font-semibold text-gray-600">
-                                                    {points} points
+                                                <span className="text-sm text-gray-600">
+                                                    You're spending <span className="font-bold">{points}</span> points
                                                 </span>
 
                                                 {/* Commented out Yes button
