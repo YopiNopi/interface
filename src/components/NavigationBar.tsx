@@ -3,27 +3,32 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, Swords, Trophy, Gift, Users } from 'lucide-react'
+import { BookOpen, Heart, Trophy, Gift, Users } from 'lucide-react'
 
 type Page = 'game' | 'ranking' | 'instructions' | 'quests' | 'referrals'
 
-const getBackgroundColor = (page: Page) => {
+const getIcon = (page: Page, isActive: boolean) => {
+  const iconProps = {
+    className: `w-6 h-6 ${isActive ? 'text-white' : 'text-gray-400'}`,
+    strokeWidth: isActive ? 2.5 : 2
+  }
+
   switch (page) {
-    case 'instructions': return 'bg-[#D3E3F3]'
-    case 'referrals': return 'bg-[#E3D3F3]'
-    case 'game': return 'bg-[#D3F3E3]'
-    case 'ranking': return 'bg-[#F3EBD3]'
-    case 'quests': return 'bg-[#F3D3E3]'
+    case 'instructions': return <BookOpen {...iconProps} />
+    case 'referrals': return <Users {...iconProps} />
+    case 'game': return <Heart {...iconProps} />
+    case 'ranking': return <Trophy {...iconProps} />
+    case 'quests': return <Gift {...iconProps} />
   }
 }
 
-const getIcon = (page: Page) => {
+const getGradient = (page: Page) => {
   switch (page) {
-    case 'instructions': return <BookOpen className="w-6 h-6 text-white" />
-    case 'referrals': return <Users className="w-6 h-6 text-white" />
-    case 'game': return <Swords className="w-6 h-6 text-white" />
-    case 'ranking': return <Trophy className="w-6 h-6 text-white" />
-    case 'quests': return <Gift className="w-6 h-6 text-white" /> // Changed from Target to Gift
+    case 'instructions': return 'from-blue-500 to-indigo-500'
+    case 'referrals': return 'from-purple-500 to-pink-500'
+    case 'game': return 'from-emerald-500 to-teal-500'
+    case 'ranking': return 'from-amber-500 to-orange-500'
+    case 'quests': return 'from-pink-500 to-rose-500'
   }
 }
 
@@ -38,23 +43,44 @@ export default function NavigationBar() {
     'game'
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 flex justify-center bg-[#FBF7EF]">
-      <div className="flex justify-between items-end max-w-md w-full px-4">
-        {(['instructions', 'referrals', 'game', 'ranking', 'quests'] as const).map((page) => (
-          <Link 
-            key={page}
-            href={page === 'game' ? '/' : `/${page}`}
-            className={`w-[18%] cursor-pointer overflow-hidden`} 
-          >
-            <div 
-              className={`w-full ${getBackgroundColor(page)} rounded-t-full transition-all duration-300 ease-in-out flex items-center justify-center ${currentPage === page ? 'h-24' : 'h-20'}`}
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex justify-center">
+      <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/80 backdrop-blur-lg shadow-lg border border-white/20">
+        {(['instructions', 'referrals', 'game', 'ranking', 'quests'] as const).map((page) => {
+          const isActive = currentPage === page;
+          return (
+            <Link 
+              key={page}
+              href={page === 'game' ? '/' : `/${page}`}
+              className="relative" 
             >
-              <div className={`w-12 h-12 rounded-full bg-black flex items-center justify-center`}>
-                {getIcon(page)}
+              <div className={`
+                relative z-10 p-3 rounded-xl transition-all duration-300 
+                ${isActive ? 'scale-110' : 'scale-100'}
+              `}>
+                {/* Active Gradient Background */}
+                {isActive && (
+                  <div className={`
+                    absolute inset-0 rounded-xl bg-gradient-to-r ${getGradient(page)}
+                    shadow-lg
+                  `} />
+                )}
+
+                {/* Icon */}
+                <div className="relative z-10">
+                  {getIcon(page, isActive)}
+                </div>
+
+                {/* Active Glow Effect */}
+                {isActive && (
+                  <div className={`
+                    absolute inset-0 rounded-xl bg-gradient-to-r ${getGradient(page)}
+                    opacity-50 blur-xl -z-10
+                  `} />
+                )}
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          )
+        })}
       </div>
     </div>
   )
