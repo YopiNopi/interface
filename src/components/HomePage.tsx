@@ -152,7 +152,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col items-center min-h-screen bg-[#FBF7EF] pb-28 pt-16">
+        <div className="flex flex-col items-center min-h-screen bg-[#FBF7EF] pb-28 pt-8">
             <div className="w-full max-w-[368px] px-4 space-y-8">
                 {/* Header Section */}
                 <div className="relative space-y-3 text-center pb-2">
@@ -166,7 +166,6 @@ const HomePage: React.FC = () => {
                         <p className="text-gray-600 text-xs font-medium mt-0.5 tracking-wider">
                             Swipe right for Yes, left for No
                         </p>
-                        <div className="absolute left-1/2 -bottom-4 w-20 h-[2px] bg-gradient-to-r from-indigo-500/0 via-purple-500/50 to-indigo-500/0 transform -translate-x-1/2" />
                     </div>
                 </div>
 
