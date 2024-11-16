@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import useGlobal from '@/hooks/useGlobal';
-import { motion, PanInfo, useAnimation } from 'framer-motion';
+import { motion, PanInfo, useAnimation, AnimatePresence } from 'framer-motion';
 import { getActiveMarkets } from '@/utils/api';
-import { Check, X, Loader2 } from 'lucide-react';
+import { Check, X, Loader2, Minus, Plus } from 'lucide-react';
 import { Market } from '@/types/market';
 import { formatTimeRemaining } from '@/utils/dateFormat';
+import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 
 const swipeConfidenceThreshold = 10000;
 const swipeThreshold = 100;
@@ -15,19 +16,43 @@ const swipeVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 1000 : -1000,
     rotate: direction > 0 ? 50 : -50,
-    opacity: 0
+    opacity: 0,
+    scale: 0.8
   }),
   center: {
     x: 0,
     rotate: 0,
-    opacity: 1
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.3
+    }
   },
   exit: (direction: number) => ({
     x: direction < 0 ? 1000 : -1000,
     rotate: direction < 0 ? 50 : -50,
-    opacity: 0
+    opacity: 0,
+    scale: 0.8,
+    transition: {
+      duration: 0.3
+    }
   })
 };
+
+const samplePriceHistory = [
+    { timestamp: 1, price: 45 },
+    { timestamp: 2, price: 52 },
+    { timestamp: 3, price: 48 },
+    { timestamp: 4, price: 65 },
+    { timestamp: 5, price: 58 },
+    { timestamp: 6, price: 73 },
+    { timestamp: 7, price: 68 },
+    { timestamp: 8, price: 77 },
+    { timestamp: 9, price: 85 },
+    { timestamp: 10, price: 78 },
+    { timestamp: 11, price: 82 },
+    { timestamp: 12, price: 88 },
+];
 
 const HomePage: React.FC = () => {
     const [markets, setMarkets] = useState<Market[]>([]);
@@ -37,6 +62,7 @@ const HomePage: React.FC = () => {
     const [direction, setDirection] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [points, setPoints] = useState(5);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,25 +89,9 @@ const HomePage: React.FC = () => {
         const swipe = swipePower(info.offset.x, info.velocity.x);
         
         if (swipe < -swipeConfidenceThreshold) {
-            setDirection(-1);
-            await controls.start({ 
-                x: -window.innerWidth, 
-                rotate: -30,
-                transition: { duration: 0.5 }
-            });
-            console.log(`Voted no on market ${markets[currentIndex].id}`);
-            setCurrentIndex(prev => prev + 1);
-            controls.set({ x: 0, rotate: 0 });
+            await handleVote(false);
         } else if (swipe > swipeConfidenceThreshold) {
-            setDirection(1);
-            await controls.start({ 
-                x: window.innerWidth, 
-                rotate: 30,
-                transition: { duration: 0.5 }
-            });
-            console.log(`Voted yes on market ${markets[currentIndex].id}`);
-            setCurrentIndex(prev => prev + 1);
-            controls.set({ x: 0, rotate: 0 });
+            await handleVote(true);
         } else {
             controls.start({ x: 0, rotate: 0 });
         }
@@ -89,6 +99,23 @@ const HomePage: React.FC = () => {
 
     const swipePower = (offset: number, velocity: number) => {
         return Math.abs(offset) * velocity;
+    };
+
+    const handleVote = async (isYes: boolean) => {
+        const newDirection = isYes ? 1 : -1;
+        setDirection(newDirection);
+        
+        await controls.start({ 
+            x: isYes ? window.innerWidth : -window.innerWidth, 
+            rotate: isYes ? 30 : -30,
+            transition: { duration: 0.3 }
+        });
+        
+        console.log(`Voted ${isYes ? 'yes' : 'no'} on market ${markets[currentIndex].id} with ${points} points`);
+        
+        await new Promise(resolve => setTimeout(resolve, 100));
+        setCurrentIndex(prev => prev + 1);
+        controls.set({ x: 0, rotate: 0 });
     };
 
     if (error) {
@@ -145,68 +172,158 @@ const HomePage: React.FC = () => {
 
                 {/* Market Card */}
                 <div className="relative h-[460px] w-full">
-                    <motion.div
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={1}
-                        onDragEnd={handleDragEnd}
-                        animate={controls}
-                        variants={swipeVariants}
-                        initial="center"
-                        className="absolute w-full cursor-grab active:cursor-grabbing"
-                        style={{ x: 0 }}
-                        whileDrag={{ scale: 1.05 }}
-                    >
-                        <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden h-[460px]">
-                            {/* Gradient overlay for text readability */}
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
-                            
-                            {/* Random gradient background */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-indigo-200 to-pink-100" />
+                    <AnimatePresence initial={false} custom={direction}>
+                        <motion.div
+                            key={currentIndex}
+                            custom={direction}
+                            drag="x"
+                            dragConstraints={{ left: 0, right: 0 }}
+                            dragElastic={1}
+                            onDragEnd={handleDragEnd}
+                            variants={swipeVariants}
+                            initial="enter"
+                            animate="center"
+                            exit="exit"
+                            className="absolute w-full cursor-grab active:cursor-grabbing"
+                            whileDrag={{ scale: 1.05 }}
+                        >
+                            <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden h-[460px]">
+                                {/* Gradient overlay for text readability */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
+                                
+                                {/* Random gradient background */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-indigo-200 to-pink-100" />
 
-                            {/* Content */}
-                            <div className="relative h-full flex flex-col justify-between p-6">
-                                {/* Resolution Time Badge */}
-                                <div className="absolute top-4 right-4">
-                                    <div className="bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                                        <div className="flex items-center gap-1.5">
-                                            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                            <span className="text-sm font-medium text-white">
-                                                {formatTimeRemaining(markets[currentIndex].end_time)}
-                                            </span>
+                                {/* Content */}
+                                <div className="relative h-full flex flex-col justify-between p-6">
+                                    {/* Resolution Time Badge */}
+                                    <div className="absolute top-4 right-4">
+                                        <div className="bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                                <span className="text-sm font-medium text-white">
+                                                    {formatTimeRemaining(markets[currentIndex].end_time)}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="space-y-4">
-                                    <h2 className="text-2xl font-bold text-gray-800">
-                                        {markets[currentIndex].question_text}
-                                    </h2>
-                                    {markets[currentIndex].extra_info?.token && (
-                                        <div className="flex items-center gap-2 text-gray-600 text-sm">
-                                            <span className="font-medium">Token:</span>
-                                            <span>{markets[currentIndex].extra_info.token}</span>
+                                    <div className="space-y-4">
+                                        <h2 className="text-2xl font-bold text-gray-800">
+                                            {markets[currentIndex].question_text}
+                                        </h2>
+                                        
+                                        {/* Price History Chart */}
+                                        <div className="h-32 -mx-2">
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <AreaChart
+                                                    data={samplePriceHistory}
+                                                    margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+                                                >
+                                                    <defs>
+                                                        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                                                            <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3}/>
+                                                            <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <Area
+                                                        type="monotone"
+                                                        dataKey="price"
+                                                        stroke="#8B5CF6"
+                                                        strokeWidth={2}
+                                                        fill="url(#colorPrice)"
+                                                        dot={false}
+                                                        isAnimationActive={true}
+                                                    />
+                                                </AreaChart>
+                                            </ResponsiveContainer>
                                         </div>
-                                    )}
-                                    <p className="text-gray-600">
-                                        {markets[currentIndex].description || "No additional details provided."}
-                                    </p>
-                                </div>
 
-                                {/* Vote indicators */}
-                                <div className="flex justify-between items-center mt-4">
-                                    <div className="flex items-center gap-2 text-red-500">
-                                        <X className="w-6 h-6" />
-                                        <span>No</span>
+                                        {markets[currentIndex].extra_info?.token && (
+                                            <div className="flex items-center gap-2 text-gray-600 text-sm">
+                                                <span className="font-medium">Token:</span>
+                                                <span>{markets[currentIndex].extra_info.token}</span>
+                                            </div>
+                                        )}
+                                        <p className="text-gray-600">
+                                            {markets[currentIndex].description || "No additional details provided."}
+                                        </p>
                                     </div>
-                                    <div className="flex items-center gap-2 text-green-500">
-                                        <span>Yes</span>
-                                        <Check className="w-6 h-6" />
+
+                                    {/* Vote indicators and Points Selector */}
+                                    <div className="flex flex-col gap-4 mt-4">
+                                        {/* Points Selector */}
+                                        <div className="flex items-center justify-between gap-4"
+                                            onPointerDown={(e) => e.stopPropagation()}
+                                            onPointerMove={(e) => e.stopPropagation()}
+                                        >
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setPoints(prev => Math.max(1, prev - 1));
+                                                }}
+                                                className="p-1 rounded-full hover:bg-black/10 transition-colors"
+                                            >
+                                                <Minus className="w-4 h-4 text-gray-600" />
+                                            </button>
+                                            
+                                            <div className="flex-1 relative">
+                                                <input
+                                                    type="range"
+                                                    min="1"
+                                                    max="100"
+                                                    value={points}
+                                                    onChange={(e) => setPoints(Number(e.target.value))}
+                                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                                                    onPointerDown={(e) => e.stopPropagation()}
+                                                    onPointerMove={(e) => e.stopPropagation()}
+                                                />
+                                                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                                                    <div className="bg-purple-500 text-white px-2 py-1 rounded-lg text-sm font-medium">
+                                                        {points} pts
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setPoints(prev => Math.min(100, prev + 1));
+                                                }}
+                                                className="p-1 rounded-full hover:bg-black/10 transition-colors"
+                                            >
+                                                <Plus className="w-4 h-4 text-gray-600" />
+                                            </button>
+                                        </div>
+
+                                        {/* Vote Buttons */}
+                                        <div className="flex justify-between items-center">
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleVote(false);
+                                                }}
+                                                className="flex items-center gap-2 text-red-500 hover:scale-105 transition-transform"
+                                            >
+                                                <X className="w-6 h-6" />
+                                                <span>No</span>
+                                            </button>
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleVote(true);
+                                                }}
+                                                className="flex items-center gap-2 text-green-500 hover:scale-105 transition-transform"
+                                            >
+                                                <span>Yes</span>
+                                                <Check className="w-6 h-6" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
