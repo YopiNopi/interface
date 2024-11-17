@@ -8,6 +8,8 @@ import { mainnet, sepolia } from 'wagmi/chains'
 
 const queryClient = new QueryClient();
 
+const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID || '';
+
 // Configure wagmi
 const wagmiConfig = createConfig({
     chains: [mainnet, sepolia],
@@ -22,7 +24,7 @@ export function Providers({ children }: PropsWithChildren) {
         <WagmiConfig config={wagmiConfig}>
             <QueryClientProvider client={queryClient}>
                 <PrivyProvider
-                    appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
+                    appId={appId}
                     config={{
                         loginMethods: ['telegram'],
                         appearance: {
