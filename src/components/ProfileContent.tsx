@@ -130,6 +130,19 @@ const recentClaims: Claim[] = [
   }
 ];
 
+// Add this after other constants
+const positionGradients = [
+  "from-blue-100 via-indigo-100 to-violet-100",
+  "from-fuchsia-100 via-pink-100 to-rose-100",
+  "from-amber-100 via-orange-100 to-red-100",
+  "from-emerald-100 via-green-100 to-teal-100",
+  "from-cyan-100 via-sky-100 to-blue-100",
+];
+
+const getPositionGradient = (index: number) => {
+  return positionGradients[index % positionGradients.length];
+};
+
 const ProfileContent: React.FC = () => {
   const user = {
     username: "CryptoWhale",
@@ -162,37 +175,16 @@ const ProfileContent: React.FC = () => {
           </div>
         </div>
 
-        {/* Stats Cards with Creative Design */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* Points Balance Card */}
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 p-4 transition-transform hover:scale-[1.02] duration-300">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-16 translate-x-8 group-hover:translate-y-[-4rem] transition-transform duration-500" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full blur-2xl translate-y-16 -translate-x-8 group-hover:translate-y-[4rem] transition-transform duration-500" />
-            <div className="relative">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-1.5 bg-white/10 rounded-lg backdrop-blur-sm">
-                  <Wallet className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-sm font-medium text-white/90">Balance</span>
-              </div>
+        {/* Stats Cards with Dark Theme */}
+        <div className="bg-gray-900/90 backdrop-blur-lg rounded-2xl p-4">
+          <div className="grid grid-cols-2 divide-x divide-gray-700">
+            <div className="text-center px-4">
               <div className="text-2xl font-bold text-white">1,250</div>
-              <div className="text-xs text-white/80 mt-1">Available Points</div>
+              <div className="text-xs text-gray-400">Available Points</div>
             </div>
-          </div>
-
-          {/* Total Rewards Card */}
-          <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-fuchsia-500 to-pink-500 p-4 transition-transform hover:scale-[1.02] duration-300">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-16 translate-x-8 group-hover:translate-y-[-4rem] transition-transform duration-500" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full blur-2xl translate-y-16 -translate-x-8 group-hover:translate-y-[4rem] transition-transform duration-500" />
-            <div className="relative">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-1.5 bg-white/10 rounded-lg backdrop-blur-sm">
-                  <Trophy className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-sm font-medium text-white/90">Rewards</span>
-              </div>
+            <div className="text-center px-4">
               <div className="text-2xl font-bold text-white">2,500</div>
-              <div className="text-xs text-white/80 mt-1">Total Earned</div>
+              <div className="text-xs text-gray-400">Total Earned</div>
             </div>
           </div>
         </div>
@@ -214,10 +206,14 @@ const ProfileContent: React.FC = () => {
                 No open positions yet
               </div>
             ) : (
-              openPositions.slice(0, 3).map((position) => (
+              openPositions.slice(0, 3).map((position, index) => (
                 <div
                   key={position.id}
-                  className="p-4 hover:bg-gray-50 rounded-xl transition-colors border border-gray-100 mb-2 last:mb-0"
+                  className={`
+                    relative overflow-hidden p-4 rounded-xl transition-all duration-300 
+                    hover:shadow-md border border-gray-100 mb-2 last:mb-0
+                    bg-gradient-to-br ${getPositionGradient(index)}
+                  `}
                 >
                   {/* Market Info */}
                   <div className="flex items-start justify-between gap-3 mb-3">
@@ -229,10 +225,10 @@ const ProfileContent: React.FC = () => {
                           </span>
                         )}
                         <span className={`
-                          px-2 py-1 rounded-lg text-xs font-semibold
-                          ${position.status === 'active' ? 'bg-blue-100 text-blue-700' :
-                            position.status === 'won' ? 'bg-emerald-100 text-emerald-700' :
-                            'bg-red-100 text-red-700'}
+                          px-2 py-1 rounded-lg text-xs font-semibold backdrop-blur-sm
+                          ${position.status === 'active' ? 'bg-blue-500/10 text-blue-700' :
+                            position.status === 'won' ? 'bg-emerald-500/10 text-emerald-700' :
+                            'bg-red-500/10 text-red-700'}
                         `}>
                           {position.status === 'active' ? 'In Progress' : 
                            position.status === 'won' ? 'Won' : 'Lost'}
@@ -242,58 +238,67 @@ const ProfileContent: React.FC = () => {
                         {position.market.question_text}
                       </p>
                     </div>
+                    {/* Move claim button here for won positions */}
+                    {position.redeemable && (
+                      <button 
+                        onClick={() => {
+                          console.log(`Redeeming ${position.potential_win} points from market ${position.market.id}`);
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity"
+                      >
+                        <Trophy className="w-3.5 h-3.5" />
+                        Claim {position.potential_win} pts
+                      </button>
+                    )}
                   </div>
 
                   {/* Position Details */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       {/* Your Prediction */}
                       <div className="flex flex-col">
                         <span className="text-xs text-gray-500 mb-0.5">Your Prediction</span>
-                        <span className={`
-                          text-sm font-semibold
-                          ${position.vote === 'Yes' ? 'text-green-600' : 'text-red-600'}
+                        <div className={`
+                          px-2 py-1 rounded-lg text-xs font-semibold
+                          ${position.vote === 'Yes' ? 
+                            'bg-green-500/10 text-green-700' : 
+                            'bg-red-500/10 text-red-700'}
                         `}>
                           {position.vote}
-                        </span>
+                        </div>
                       </div>
 
                       {/* Points Staked */}
                       <div className="flex flex-col">
                         <span className="text-xs text-gray-500 mb-0.5">Points Staked</span>
-                        <span className="text-sm font-semibold text-gray-800">
+                        <div className="px-2 py-1 rounded-lg text-xs font-semibold bg-gray-500/10 text-gray-700">
                           {position.points} pts
-                        </span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Potential Win or Action Button */}
+                    {/* Potential Win or Result */}
                     <div>
                       {position.status === 'active' ? (
                         <div className="flex flex-col items-end">
                           <span className="text-xs text-gray-500 mb-0.5">Potential Win</span>
-                          <span className="text-sm font-semibold text-emerald-600">
+                          <div className="px-2 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-700">
                             +{position.potential_win} pts
-                          </span>
+                          </div>
                         </div>
-                      ) : position.redeemable ? (
-                        <button 
-                          onClick={() => {
-                            console.log(`Redeeming ${position.potential_win} points from market ${position.market.id}`);
-                          }}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-medium rounded-lg hover:opacity-90 transition-opacity"
-                        >
-                          <Trophy className="w-3.5 h-3.5" />
-                          Claim {position.potential_win} pts
-                        </button>
                       ) : (
                         <div className="flex flex-col items-end">
                           <span className="text-xs text-gray-500 mb-0.5">Result</span>
-                          <span className={`text-sm font-semibold ${
-                            position.status === 'won' ? 'text-emerald-600' : 'text-red-600'
-                          }`}>
-                            {position.status === 'won' ? `+${position.potential_win} pts` : 'No win'}
-                          </span>
+                          <div className={`
+                            px-2 py-1 rounded-lg text-xs font-semibold
+                            ${position.status === 'won' ? 
+                              'bg-emerald-500/10 text-emerald-700' : 
+                              'bg-red-500/10 text-red-700'}
+                          `}>
+                            {position.status === 'won' ? 
+                              `+${position.potential_win} pts` : 
+                              'No win'}
+                          </div>
                         </div>
                       )}
                     </div>

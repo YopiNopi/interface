@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { UserCircle2, Heart, Trophy, Gift, Users } from 'lucide-react'
+import { User, Heart, Trophy, Gift, Users } from 'lucide-react'
 
 type Page = 'profile' | 'ranking' | 'game' | 'quests' | 'referrals'
 
@@ -14,7 +14,7 @@ const getIcon = (page: Page, isActive: boolean) => {
   }
 
   switch (page) {
-    case 'profile': return <UserCircle2 {...iconProps} />
+    case 'profile': return <User {...iconProps} />
     case 'referrals': return <Users {...iconProps} />
     case 'game': return <Heart {...iconProps} />
     case 'ranking': return <Trophy {...iconProps} />

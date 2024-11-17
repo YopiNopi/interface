@@ -158,7 +158,6 @@ export default function RankingList() {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <Star className="w-4 h-4 mr-1 text-yellow-500" />
                   <span className="font-medium text-sm">{points} pts</span>
                 </div>
               </div>
