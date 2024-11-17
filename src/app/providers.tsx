@@ -8,7 +8,7 @@ import { mainnet, sepolia } from 'wagmi/chains'
 
 const queryClient = new QueryClient();
 
-const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID || '';
+const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID || 'cm3kjd05g008xoab7flp8qaav';
 
 // Configure wagmi
 const wagmiConfig = createConfig({
