@@ -3,15 +3,10 @@
 import { usePrivy } from '@privy-io/react-auth';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-
-type LoginOptions = {
-    loginMethod: string;
-    createWallet?: boolean;
-};
 export function TelegramLogin() {
     const { login, ready, authenticated, user } = usePrivy();
 
-    const loginOptions: LoginOptions = {
+    const loginOptions: any = {
         loginMethod: 'telegram',
         createWallet: true,
     };

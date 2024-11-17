@@ -239,7 +239,7 @@ const HomePage: React.FC = () => {
                                                 <div className="flex items-center gap-1.5">
                                                     <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                                                     <span className="text-sm font-medium text-white">
-                                                        Ends in {formatTimeRemaining(markets[currentIndex].end_time)}
+                                                        Ends in {formatTimeRemaining(Number(markets[currentIndex].end_time))}
                                                     </span>
                                                 </div>
                                             </div>
