@@ -25,13 +25,19 @@ export default function RankingList() {
     { id: 5, name: "Jack Sparrow", wins: 7, losses: 10, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=Sparrow" },
     { id: 6, name: "Moby Dick", wins: 5, losses: 12, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=Moby" },
     { id: 7, name: "Aquaman", wins: 3, losses: 15, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=Aquaman" },
-    ...Array.from({ length: 13 }, (_, i) => ({
-      id: i + 8,
-      name: `Player ${i + 8}`,
-      wins: Math.floor(Math.random() * 20),
-      losses: Math.floor(Math.random() * 20),
-      avatar: `https://api.dicebear.com/6.x/bottts/svg?seed=${i + 8}`
-    }))
+    { id: 8, name: "Player 8", wins: 8, losses: 8, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=8" },
+    { id: 9, name: "Player 9", wins: 7, losses: 9, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=9" },
+    { id: 10, name: "Player 10", wins: 6, losses: 10, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=10" },
+    { id: 11, name: "Player 11", wins: 5, losses: 11, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=11" },
+    { id: 12, name: "Player 12", wins: 4, losses: 12, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=12" },
+    { id: 13, name: "Player 13", wins: 3, losses: 13, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=13" },
+    { id: 14, name: "Player 14", wins: 2, losses: 14, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=14" },
+    { id: 15, name: "Player 15", wins: 1, losses: 15, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=15" },
+    { id: 16, name: "Player 16", wins: 0, losses: 16, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=16" },
+    { id: 17, name: "Player 17", wins: 4, losses: 13, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=17" },
+    { id: 18, name: "Player 18", wins: 5, losses: 12, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=18" },
+    { id: 19, name: "Player 19", wins: 6, losses: 11, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=19" },
+    { id: 20, name: "Player 20", wins: 7, losses: 10, avatar: "https://api.dicebear.com/6.x/bottts/svg?seed=20" },
   ]
 
   const calculatePoints = (wins: number, losses: number) => {
@@ -54,29 +60,67 @@ export default function RankingList() {
   return (
     <ScrollArea className="w-full h-[calc(100vh-64px)]">
       <div className="flex flex-col items-center justify-start bg-[#FBF7EF] pb-28 px-1 pt-4">
-        <div className="w-full max-w-[368px] mb-6 p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white shadow-lg">
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <h2 className="text-sm font-semibold opacity-75">Your Current Rank</h2>
-              <div className="text-3xl font-bold">{currentUserRank}</div>
+        <div className="w-full max-w-[368px] mb-6">
+          <div className="relative overflow-hidden rounded-2xl shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 opacity-95" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            
+            <div className="relative p-4">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="flex flex-col items-center">
+                  <div className="text-2xl font-black text-white tracking-tight">
+                    #{currentUserRank}
+                  </div>
+                  <div className="text-[10px] font-medium text-white/80">
+                    Current Rank
+                  </div>
+                </div>
+                <div className="w-px h-8 bg-white/30" />
+                <div className="flex flex-col">
+                  <div className="text-xl font-bold text-white">
+                    {currentUserPoints}
+                  </div>
+                  <div className="text-[10px] font-medium text-white/80">
+                    Total Points
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-white/15 backdrop-blur-md rounded-xl p-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="text-xs font-medium text-white/90">Wins</span>
+                  </div>
+                  <div className="mt-0.5 text-lg font-bold text-white">
+                    {currentUserData?.wins || 0}
+                  </div>
+                </div>
+                <div className="bg-white/15 backdrop-blur-md rounded-xl p-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                    <span className="text-xs font-medium text-white/90">Losses</span>
+                  </div>
+                  <div className="mt-0.5 text-lg font-bold text-white">
+                    {currentUserData?.losses || 0}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-3">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-[10px] font-medium text-white/80">Win Rate</span>
+                  <span className="text-[10px] font-bold text-white">{winRate.toFixed(1)}%</span>
+                </div>
+                <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full transition-all duration-500"
+                    style={{ width: `${winRate}%` }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="text-right">
-              <div className="text-sm opacity-75">Total Points</div>
-              <div className="text-2xl font-semibold">{currentUserPoints}</div>
-            </div>
-          </div>
-          <div className="flex justify-between text-sm mb-1">
-            <div>Wins: {currentUserData?.wins}</div>
-            <div>Losses: {currentUserData?.losses}</div>
-          </div>
-          <div className="w-full bg-blue-200 rounded-full h-2 mb-1">
-            <div
-              className="bg-yellow-400 h-2 rounded-full"
-              style={{ width: `${winRate}%` }}
-            ></div>
-          </div>
-          <div className="text-xs text-right">
-            Win Rate: {winRate.toFixed(1)}%
           </div>
         </div>
         <div className="w-full max-w-[368px]">
@@ -114,7 +158,6 @@ export default function RankingList() {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <Star className="w-4 h-4 mr-1 text-yellow-500" />
                   <span className="font-medium text-sm">{points} pts</span>
                 </div>
               </div>

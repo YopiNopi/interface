@@ -1,6 +1,8 @@
 'use client';
 
 import { usePrivy } from '@privy-io/react-auth';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 type LoginOptions = {
     loginMethod: string;
@@ -27,54 +29,30 @@ export function TelegramLogin() {
 
     if (authenticated && user) {
         return (
-            <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
-                {/* User Profile */}
-                <div className="flex items-center space-x-3">
-                    {user.telegram?.photoUrl && (
-                        <img
-                            src={user.telegram.photoUrl}
-                            alt="Profile"
-                            className="w-10 h-10 rounded-full"
-                        />
-                    )}
-                    <div>
-                        <h2 className="font-medium">
-                            {user.telegram?.firstName} {user.telegram?.lastName}
-                        </h2>
-                        {user.telegram?.username && (
-                            <p className="text-sm text-gray-500">@{user.telegram.username}</p>
-                        )}
-                    </div>
-                </div>
 
-                {/* Wallet Address */}
-                <div className="border-t pt-4">
-                    <h3 className="text-sm font-medium text-gray-500">Wallet Address</h3>
-                    <div className="mt-1 flex items-center space-x-2">
-                        <code className="text-sm bg-gray-100 p-2 rounded break-all">
-                            {walletAddress}
-                        </code>
-                        <button
-                            onClick={() => navigator.clipboard.writeText(walletAddress || '')}
-                            className="p-2 text-gray-500 hover:text-gray-700"
-                            title="Copy address"
-                        >
-                            <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                                />
-                            </svg>
-                        </button>
+            <div>
+                {/* User Profile Header with Gradient Orb */}
+                <div className="relative" >
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-32 h-32 bg-gradient-to-r from-violet-500/30 via-fuchsia-500/30 to-pink-500/30 rounded-full blur-3xl" />
                     </div>
-                </div>
+                    <div className="relative flex items-center gap-4">
+                        <Avatar className="w-16 h-16 border-2 border-white shadow-lg">
+                            <AvatarImage src={user.telegram?.photoUrl ? user.telegram?.photoUrl : ''} />
+                            <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-500 text-lg text-white">
+                                {user.telegram?.firstName} {user.telegram?.lastName}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <h1 className="text-xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 text-transparent bg-clip-text">
+                                {user.telegram?.firstName} {user.telegram?.lastName}
+                            </h1>
+                            <p className="text-sm text-gray-500">
+                                Active Trader
+                            </p>
+                        </div>
+                    </div>
+                </div >
             </div>
         );
     }

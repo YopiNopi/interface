@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Market } from '@/types/market';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://app.gpm.lol/api';
 const API_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN || '73282af8f3d247ca9dfd90bccbe673d3';
@@ -10,7 +11,12 @@ const api = axios.create({
   },
 });
 
-export const getActiveMarkets = async () => {
+interface ApiResponse {
+  items: Market[];
+  // add other response fields if any
+}
+
+export const getActiveMarkets = async (): Promise<ApiResponse> => {
   try {
     const response = await api.post('/getActiveMarkets', {
       token: API_TOKEN

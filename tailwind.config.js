@@ -90,6 +90,16 @@ module.exports = {
             '0%': { transform: 'rotate(0deg)' },
             '100%': { transform: 'rotate(360deg)' },
           },
+          'gradient-x': {
+            '0%, 100%': {
+              'background-size': '200% 200%',
+              'background-position': 'left center',
+            },
+            '50%': {
+              'background-size': '200% 200%',
+              'background-position': 'right center',
+            },
+          },
         },
         animation: {
           "accordion-down": "accordion-down 0.2s ease-out",
@@ -97,6 +107,7 @@ module.exports = {
           'ping': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
           'spin': 'spin 4s linear infinite',
           'radar': 'radar 4s linear infinite',
+          'gradient-x': 'gradient-x 3s ease-in-out infinite',
         },
       },
       utilities: {
