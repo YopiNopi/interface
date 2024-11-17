@@ -12,21 +12,27 @@
     "lt": "lt --port 3000 --subdomain $LT_SUBDOMAIN"
   },
   "dependencies": {
+    "@privy-io/react-auth": "^1.94.2",
+    "@privy-io/wagmi-connector": "^0.1.13",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-scroll-area": "^1.0.4",
     "@radix-ui/react-slot": "^1.0.2",
+    "@tanstack/react-query": "^5.60.5",
     "@vercel/kv": "^0.2.2",
+    "@wagmi/core": "^2.14.6",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "framer-motion": "^11.0.0",
-    "lucide-react": "^0.279.0",
+    "lucide-react": "^0.460.0",
     "next": "14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "viem": "^2.21.45",
+    "wagmi": "^2.12.33",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

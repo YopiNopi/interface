@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Users, Bot, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getActiveMarkets } from '@/utils/api';
+import { TelegramLogin } from '@/components/TelegramLogin';
 
 interface HomePageProps { }
 
@@ -41,6 +42,13 @@ const HomePage: React.FC<HomePageProps> = () => {
     return (
         <div className="flex flex-col items-center min-h-screen bg-[#FBF7EF] pb-28 pt-16">
             <div className="w-full max-w-[368px] px-4 space-y-8">
+                <div className="w-full max-w-md space-y-6">
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold">Welcome</h1>
+                        <p className="text-gray-600 mt-2">Sign in to continue</p>
+                    </div>
+                    <TelegramLogin />
+                </div>
 
                 {/* Header Section */}
                 <div className="relative space-y-3 text-center pb-2">
@@ -60,9 +68,9 @@ const HomePage: React.FC<HomePageProps> = () => {
 
                 {/* Markets Section */}
                 <div className="grid">
-                        <div>
-                            {markets[0]?.question_text}
-                        </div>
+                    <div>
+                        {markets[0]?.question_text}
+                    </div>
                 </div>
 
             </div>

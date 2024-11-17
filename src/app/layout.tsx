@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NavigationBar from '@/components/NavigationBar'
 import './globals.css'
+import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,7 +22,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#FBF7EF] min-h-screen`}>
         <div className="flex flex-col min-h-screen">
           <main className="flex-grow">
-            {children}
+            <Providers>{children}</Providers>
           </main>
           <NavigationBar />
         </div>
